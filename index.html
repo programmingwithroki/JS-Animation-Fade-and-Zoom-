@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scroll Animations</title>
+<style>
+  .animated {
+    opacity: 0;
+    transition: opacity 0.5s ease, transform 0.8s ease;
+    margin: auto; /* Center the elements horizontally */
+  }
+  
+  .fade-in {
+    opacity: 0;
+    transform: scale(0.1);
+  }
+  
+  .fade-left {
+    opacity: 0;
+    transform: translateX(-400px);
+  }
+  
+  .fade-right {
+    opacity: 0;
+    transform: translateX(400px);
+  }
+  
+  .zoom-in {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+
+  .fade-in.entered, .fade-left.entered, .fade-right.entered, .zoom-in.entered {
+    opacity: 1;
+    transform: translateX(0) translateY(0) scale(1);
+  }
+</style>
+</head>
+<body>
+
+<div>Scroll down to see the animations</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+  function isInViewport(element) {
+    var rect = element.getBoundingClientRect();
+    var windowHeight = window.innerHeight || document.documentElement.clientHeight;
+    var threshold = 0.95; // Adjust this threshold as needed (0.95 means 95% of the viewport height)
+
+    return (
+      rect.top >= -threshold * windowHeight &&
+      rect.left >= 0 &&
+      rect.bottom <= (1 + threshold) * windowHeight &&
+      rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    );
+  }
+
+  function handleAnimations() {
+    $('.animated').each(function() {
+      if (isInViewport(this)) {
+        $(this).addClass('entered');
+      } else {
+        $(this).removeClass('entered');
+      }
+    });
+  }
+
+  // Initial check for animations when the page loads
+  handleAnimations();
+
+  // Re-check for animations on scroll
+  $(window).scroll(function() {
+    handleAnimations();
+  });
+});
+</script>
+
+<div class="animated fade-in" style="height: 400px; width:400px; background-color: red; ">Fade In</div>
+<div style="height: 200px;"></div>
+<div class="animated fade-left" style="height: 400px; width:400px; background-color: green; ">Fade Left</div>
+<div style="height: 200px;"></div>
+<div class="animated fade-right" style="height: 400px; width:400px; background-color: yellow; ">Fade Right</div>
+<div style="height: 200px;"></div>
+<div class="animated zoom-in" style="height: 400px; width:400px; background-color: orange;">Zoom In</div>
+
+</body>
+</html>
